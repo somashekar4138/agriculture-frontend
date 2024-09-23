@@ -1,40 +1,41 @@
-name: Firebase Deployment
+name: Build and Deploy to Development
+
 on:
   push:
     branches:
-      - main
+      - develop-v2
+    paths-ignore:
+      - "README.md"
+      - ".env.example"
+      - ".gitignore"
+  workflow_dispatch:
+
 jobs:
-  build:
-    name: Build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v2.3.2
-      - name: Install Dependencies
-        run: npm install
-      - name: Build
-        env:
-          CI: false
-        run: npm run build
-      - name: Archive Production Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: build
-          path: build
   deploy:
-    name: Deploy
-    needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v2.3.2
-      - name: Download Artifact
-        uses: actions/download-artifact@v3
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
-          name: build
-          path: build
-      - name: Deploy to Firebase
-        uses: w9jds/firebase-action@master
+          node-version: "16"
+          cache: "yarn"
+      - name: Install dependencies
+        run: yarn --prefer-offline
+      # - name: Create env file
+      #   run: |
+      #     echo "${{ secrets.DEV_ENV }}" > .env
+      - name: Build app
+        run: yarn build
+      - name: Create .firebaserc file
+        uses: jsdaniell/create-json@v1.2.1
+        with:
+          name: ".firebaserc"
+          json: ${{ secrets.DEV_FIREBASERC }}
+          dir: "/"
+      - name: Deploy to firebase
+        uses: w9jds/firebase-action@v13.3.0
         with:
           args: deploy --only hosting
         env:
