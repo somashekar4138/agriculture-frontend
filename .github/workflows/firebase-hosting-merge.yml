@@ -3,7 +3,7 @@ name: Build and Deploy to Development
 on:
   push:
     branches:
-      - develop-v2
+      - main
     paths-ignore:
       - "README.md"
       - ".env.example"
