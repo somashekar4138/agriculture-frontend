@@ -1,5 +1,6 @@
+import { environment } from "@enviroment";
 import axios from "axios";
 
 export const http = axios.create({
-	baseURL: "http://localhost:3000",
+	baseURL: environment.baseUrl,
 });
