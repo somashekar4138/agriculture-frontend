@@ -8,9 +8,8 @@ import Loader from "@shared/components/Loader";
 import ConfirmDialog from "@shared/components/ConfirmDialog";
 import { useEffectOnce } from "@shared/hooks/useEffectOnce";
 import Navbar from "@layout/navbar/Home/Navbar";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import useSocket from "@shared/hooks/useNotificationSocket";
 import axios from "axios";
 import { environment } from "@enviroment";
 
@@ -47,11 +46,14 @@ function AppContainer() {
 		);
 	}
 
-	const includeParentofSidebar = location.pathname.includes("setting");
-
 	return (
 		<Navbar>
-			<></>
+			<Routes>
+				{protectedRoutes.map(({ path, Component }) => (
+					<Route key={path} path={path} element={<Component />} />
+				))}
+				<Route path="*" element={<Navigate to="/" replace />} />
+			</Routes>
 		</Navbar>
 	);
 }

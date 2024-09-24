@@ -34,11 +34,12 @@ import SellOutlinedIcon from "@mui/icons-material/SellOutlined";
 import InsertDriveFileOutlinedIcon from "@mui/icons-material/InsertDriveFileOutlined";
 import { FaFileInvoice } from "react-icons/fa6";
 import SignalCellularAltOutlinedIcon from "@mui/icons-material/SignalCellularAltOutlined";
+import { useAuth } from "@shared/providers/AuthProviders";
 const drawerWidth = 240;
 function Sidebar({ children }: { children: React.ReactNode }) {
 	const { pathname } = useLocation();
 	const navigate = useNavigate();
-	const { logout } = useAuthStore();
+	const { signOut } = useAuth();
 	const [mobileOpen, setMobileOpen] = React.useState(false);
 	const [isClosing, setIsClosing] = React.useState(false);
 	const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
@@ -57,8 +58,8 @@ function Sidebar({ children }: { children: React.ReactNode }) {
 		},
 		{
 			name: "Logout",
-			func: () => {
-				logout();
+			func: async () => {
+				await signOut();
 			},
 		},
 	];

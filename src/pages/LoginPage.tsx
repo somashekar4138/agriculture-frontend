@@ -1,11 +1,7 @@
-import React from 'react'
+import Login from "@features/Authentication/Login";
 
 const LoginPage = () => {
-  return (
-    <div>
-      
-    </div>
-  )
-}
+	return <Login />;
+};
 
-export default LoginPage
+export default LoginPage;

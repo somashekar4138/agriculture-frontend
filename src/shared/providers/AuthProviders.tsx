@@ -18,6 +18,7 @@ import {
 } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
 import { firebaseApp } from "../../environment";
+import { useAuthStore } from "@store/auth";
 
 interface AuthContext {
 	isLoading: boolean;
@@ -45,14 +46,15 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }: Readonly<{ children: React.ReactNode }>) {
-	const [user, setUser] = useState<string | null>(null);
 	const [isLoading, setIsLoading] = useState(true);
 	const auth = getAuth(firebaseApp);
+	const { setToken, setUser, logout } = useAuthStore();
 
 	const getAccessTokenSilently = useCallback(async () => {
 		const user = auth.currentUser;
 		if (user) {
 			const token = await user.getIdToken();
+			console.log(token);
 			return token;
 		}
 		return null;
@@ -61,17 +63,14 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
 	const onAuthStateChanged = useCallback(async (authUser: User | null) => {
 		if (authUser) {
 			const token = await authUser.getIdTokenResult();
-			console.log(token, "token", authUser, "authUser");
-			// try {
-			// 	const customClaims = await customClaimsSchema.validate(token.claims);
-			// 	setUser({ ...authUser, claims: customClaims, signInProvider: token.signInProvider });
-			// 	if (customClaims.tenants) {
-			// 		prefetchTenantInfo(customClaims.tenants);
-			// 	}
-			// } catch (error) {
-			// 	console.error(error);
-			// 	setUser(authUser);
-			// }
+			setToken(token.token);
+			console.log(token, authUser);
+			setUser({
+				id: authUser.uid,
+				email: authUser.email ?? "",
+				name: authUser.displayName ?? "",
+				phone: authUser.phoneNumber ?? "",
+			});
 		}
 		setIsLoading(false);
 	}, []);
@@ -170,7 +169,7 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
 
 	const signOut = useCallback(async (id?: string) => {
 		try {
-			console.log("signing out", id);
+			await logout();
 			await auth.signOut();
 			setUser(null);
 		} catch (error) {
@@ -261,7 +260,6 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
 
 	const value = useMemo(
 		() => ({
-			user,
 			isLoading,
 			signIn,
 			signOut,
@@ -276,7 +274,6 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
 			signInWithToken,
 		}),
 		[
-			user,
 			isLoading,
 			signIn,
 			signOut,

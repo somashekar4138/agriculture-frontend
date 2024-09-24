@@ -3,14 +3,21 @@ import { mountStoreDevtool } from "simple-zustand-devtools";
 import { environment } from "@enviroment";
 import { LoaderService } from "@shared/services/LoaderService";
 
+export interface UserInterface {
+	id: string;
+	email: string;
+	name: string;
+	phone: string;
+}
+
 interface AuthStore {
 	isLoggedIn: boolean;
-	user: string | null;
+	user: UserInterface | null;
 	setLoggedIn: (isLoggedIn: boolean) => void;
-	setUser: (user: string | null) => void;
+	setUser: (user: UserInterface | null) => void;
 	setToken: (token: string) => void;
 	logout: () => void;
-	validateToken: () => Promise<string | null>;
+	validateToken: () => Promise<UserInterface | null>;
 }
 
 export const useAuthStore = create<AuthStore>((set, getStore) => ({
@@ -18,8 +25,8 @@ export const useAuthStore = create<AuthStore>((set, getStore) => ({
 	user: null,
 	setLoggedIn: (isLoggedIn) => set({ isLoggedIn }),
 	setUser: (user) => {
-		localStorage.setItem("userid", user ?? "");
-		return set({ user });
+		localStorage.setItem("userid", user ? user.id : "");
+		return set({ user, isLoggedIn: user === null ? false : true });
 	},
 	logout: () => {
 		localStorage.clear();
@@ -35,9 +42,10 @@ export const useAuthStore = create<AuthStore>((set, getStore) => ({
 		if (authToken) {
 			try {
 				LoaderService.instance.showLoader();
-				const user = "user";
-				set({ isLoggedIn: true, user: user });
-				return user;
+
+				// const user = "user";
+				// set({ isLoggedIn: true, user: user });
+				return null;
 			} catch (error) {
 				console.error("[AuthStore] validateToken error", error);
 				getStore().logout();
