@@ -1,13 +1,15 @@
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
-import App from "./App.tsx";
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
 import "./index.css";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ThemeProvider } from "@emotion/react";
-import { theme } from "./theme.tsx";
-import { ErrorBoundary } from "react-error-boundary";
 import { BrowserRouter } from "react-router-dom";
-import InternalServerErrorPage from "./pages/InternalServerErrorPage.tsx";
+import { ThemeProvider } from "@mui/material/styles";
+import { theme } from "./theme";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { environment } from "@enviroment";
+import { ErrorBoundary } from "react-error-boundary";
+import InternalServerErrorPage from "@pages/InternalServerErrorPage";
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -20,17 +22,17 @@ const queryClient = new QueryClient({
 	},
 });
 
-createRoot(document.getElementById("root")!).render(
-	<StrictMode>
+ReactDOM.createRoot(document.getElementById("root")!).render(
+	<React.StrictMode>
 		<QueryClientProvider client={queryClient}>
-    <ThemeProvider theme={theme}>
-    <BrowserRouter>
+			<ThemeProvider theme={theme}>
+				<BrowserRouter>
 					<ErrorBoundary FallbackComponent={InternalServerErrorPage}>
 						<App />
 					</ErrorBoundary>
 				</BrowserRouter>
-
-    </ThemeProvider>
+			</ThemeProvider>
+			{!environment.production && <ReactQueryDevtools />}
 		</QueryClientProvider>
-	</StrictMode>,
+	</React.StrictMode>,
 );
