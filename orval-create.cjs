@@ -12,7 +12,7 @@ const commonHooks = {
 	afterAllFilesWrite: "yarn run format",
 };
 
-const BASE_URL = "http://192.248.152.35";
+const BASE_URL = "http://localhost:8000";
 
 const AUTH_API = `${BASE_URL}`;
 const instanceTemplate = `import Axios, { AxiosError, AxiosRequestConfig } from 'axios';
@@ -46,7 +46,7 @@ const services = [
 ];
 
 // Create .env
-fs.writeFileSync("./.env", `VITE_BASE_URL=${BASE_URL}`);
+// fs.writeFileSync("./.env", `VITE_BASE_URL=${BASE_URL}`);
 
 // Create Instances folder
 fs.mkdirSync("./src/api/instances", { recursive: true });

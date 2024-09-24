@@ -3,58 +3,72 @@ import { Formik, Field, Form } from "formik";
 import { TextFormField } from "@shared/components/FormFields/TextFormField";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
-import { useUserControllerCreateUser } from "@api/services/users";
 import { PhoneInputFormField } from "@shared/components/FormFields/PhoneInputFormField";
 import { Constants } from "@shared/constants";
 import { isValidPhoneNumber } from "react-phone-number-input";
+import { RegisterUserDto } from "@api/services/models";
+import { useAppControllerRegisterUser } from "@api/services/default";
 
 const Register = () => {
 	const navigation = useNavigate();
-	const createUser = useUserControllerCreateUser({
-		mutation: {
-			onSuccess: () => {
-				navigation("/login");
-			},
-		},
-	});
+	// const createUser = useUserControllerCreateUser({
+	// 	mutation: {
+	// 		onSuccess: () => {
+	// 			navigation("/login");
+	// 		},
+	// 	},
+	// });
 
 	const initialValues = {
-		fullname: "",
-		companyname: "",
 		email: "",
-		phone: "",
+		name: "",
 		password: "",
 		conpassword: "",
+		phone: "",
 	};
 
 	const schema = yup.object().shape({
-		fullname: yup.string().required("Full Name is required"),
-		companyname: yup.string().required("Company Name is required"),
-		email: yup.string().email().required("Email is required"),
-		phone: yup.string().test("is-phone", "Phone number is not valid", function (value) {
-			if (!value) return false;
-			return isValidPhoneNumber(value);
-		}),
-		password: yup
-			.string()
-			.min(7, "Password is at least 7 characters")
-			.required("Password is required"),
+		email: yup.string().email().required(),
+		name: yup.string().required(),
+		password: yup.string().required(),
 		conpassword: yup
 			.string()
-			.oneOf([yup.ref("password")], "Passwords must match")
-			.required("Confirm Password is required"),
+			.required()
+			.oneOf([yup.ref("password")], "Passwords must match"),
+		phone: yup
+			.string()
+			.required()
+			.test({
+				name: "phone",
+				message: "Phone number is not valid",
+				test: (value) => {
+					if (!value) {
+						return false;
+					}
+					return isValidPhoneNumber(value);
+				},
+			}),
 	});
-
+	const register = useAppControllerRegisterUser();
 	const handleSubmit = async (values: typeof initialValues) => {
-		await createUser.mutateAsync({
+		console.log(values);
+		await register.mutateAsync({
 			data: {
-				name: values.fullname,
-				companyName: values.companyname,
-				phone: values.phone,
 				email: values.email,
+				name: values.name,
 				password: values.password,
+				phone: values.phone,
 			},
 		});
+		// await createUser.mutateAsync({
+		// 	data: {
+		// 		name: values.fullname,
+		// 		companyName: values.companyname,
+		// 		phone: values.phone,
+		// 		email: values.email,
+		// 		password: values.password,
+		// 	},
+		// });
 	};
 
 	return (
@@ -128,18 +142,7 @@ const Register = () => {
 								{() => {
 									return (
 										<Form>
-											<Field
-												name="fullname"
-												component={TextFormField}
-												label="Full Name"
-												required={true}
-											/>
-											<Field
-												name="companyname"
-												component={TextFormField}
-												label="Company Name"
-												required={true}
-											/>
+											<Field name="name" component={TextFormField} label="Name" required={true} />
 											<Field name="email" component={TextFormField} label="Email" required={true} />
 											<Field
 												name="phone"

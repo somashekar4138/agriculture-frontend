@@ -6,4 +6,9 @@
  * OpenAPI spec version: 1.0
  */
 
-export * from "./registerUserDto";
+export interface RegisterUserDto {
+	email: string;
+	name: string;
+	password: string;
+	phone: string;
+}

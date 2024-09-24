@@ -30,6 +30,7 @@
     "apexcharts": "^3.49.2",
     "axios": "^1.7.2",
     "dayjs": "^1.11.11",
+    "firebase": "^10.13.2",
     "formik": "^2.4.6",
     "html2canvas": "^1.4.1",
     "jspdf": "^2.5.1",

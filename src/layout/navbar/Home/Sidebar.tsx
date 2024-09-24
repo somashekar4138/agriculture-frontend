@@ -31,7 +31,6 @@ import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import PaymentIcon from "@mui/icons-material/Payment";
 import BusinessCenterOutlinedIcon from "@mui/icons-material/BusinessCenterOutlined";
 import SellOutlinedIcon from "@mui/icons-material/SellOutlined";
-import NotificationMain from "@features/Notification/NotificationMain";
 import InsertDriveFileOutlinedIcon from "@mui/icons-material/InsertDriveFileOutlined";
 import { FaFileInvoice } from "react-icons/fa6";
 import SignalCellularAltOutlinedIcon from "@mui/icons-material/SignalCellularAltOutlined";
@@ -361,7 +360,6 @@ function Sidebar({ children }: { children: React.ReactNode }) {
 						<MenuIcon />
 					</IconButton>
 					<Box display={"flex"} alignItems={"center"} gap={1}>
-						<NotificationMain />
 						<Box
 							mx={{ xs: 0, sm: 2 }}
 							sx={{ cursor: "pointer" }}

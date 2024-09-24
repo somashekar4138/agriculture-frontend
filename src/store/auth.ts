@@ -2,17 +2,15 @@ import { create } from "zustand";
 import { mountStoreDevtool } from "simple-zustand-devtools";
 import { environment } from "@enviroment";
 import { LoaderService } from "@shared/services/LoaderService";
-import { UserWithCompanyDto } from "@api/services/models";
-import { authControllerStatus } from "@api/services/auth";
 
 interface AuthStore {
 	isLoggedIn: boolean;
-	user: UserWithCompanyDto | null;
+	user: string | null;
 	setLoggedIn: (isLoggedIn: boolean) => void;
-	setUser: (user: UserWithCompanyDto | null) => void;
+	setUser: (user: string | null) => void;
 	setToken: (token: string) => void;
 	logout: () => void;
-	validateToken: () => Promise<UserWithCompanyDto | null>;
+	validateToken: () => Promise<string | null>;
 }
 
 export const useAuthStore = create<AuthStore>((set, getStore) => ({
@@ -20,7 +18,7 @@ export const useAuthStore = create<AuthStore>((set, getStore) => ({
 	user: null,
 	setLoggedIn: (isLoggedIn) => set({ isLoggedIn }),
 	setUser: (user) => {
-		localStorage.setItem("userid", user?.id ?? "");
+		localStorage.setItem("userid", user ?? "");
 		return set({ user });
 	},
 	logout: () => {
@@ -37,7 +35,7 @@ export const useAuthStore = create<AuthStore>((set, getStore) => ({
 		if (authToken) {
 			try {
 				LoaderService.instance.showLoader();
-				const user = await authControllerStatus();
+				const user = "user";
 				set({ isLoggedIn: true, user: user });
 				return user;
 			} catch (error) {
