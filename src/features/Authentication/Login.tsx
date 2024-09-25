@@ -2,7 +2,6 @@ import { Box, Button, Card, CardContent, Typography } from "@mui/material";
 import { Formik, Field, Form } from "formik";
 import { TextFormField } from "@shared/components/FormFields/TextFormField";
 import * as yup from "yup";
-import { useAuthStore } from "@store/auth";
 import { useNavigate } from "react-router-dom";
 import { Constants } from "@shared/constants";
 import { useAuth } from "@shared/providers/AuthProviders";

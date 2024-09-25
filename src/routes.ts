@@ -1,3 +1,4 @@
+import DataLookPage from "@pages/DataLookPage";
 import LoginPage from "@pages/LoginPage";
 import MainPage from "@pages/MainPage";
 import RegisterPage from "@pages/RegisterPage";
@@ -17,5 +18,9 @@ export const protectedRoutes: Route[] = [
 	{
 		path: "/",
 		Component: MainPage,
+	},
+	{
+		path: "/data-look",
+		Component: DataLookPage,
 	},
 ];

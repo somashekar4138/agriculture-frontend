@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { protectedRoutes, unProtectedRoutes } from "./routes";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -12,26 +12,15 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { environment } from "@enviroment";
+import { useLoaderStore } from "@store/loader";
 
 function AppContainer() {
 	axios.defaults.baseURL = environment.baseUrl;
-	const { isLoggedIn, logout, validateToken, user } = useAuthStore();
-	const [isLoading, setIsLoading] = useState(true);
-	const location = useLocation(); // Get the current path
+	const { isLoggedIn } = useAuthStore();
+	const token = localStorage.getItem("authToken");
+	const { user } = useAuthStore();
 
-	useEffectOnce(() => {
-		setIsLoading(true);
-		validateToken()
-			.then(() => {
-				setIsLoading(false);
-			})
-			.catch(() => {
-				logout();
-				setIsLoading(false);
-			});
-	});
-
-	if (isLoading) {
+	if (token && !user) {
 		return <Loader />;
 	}
 
@@ -60,6 +49,19 @@ function AppContainer() {
 
 function App() {
 	const [backdropOpen, setBackdropOpen] = useState(false);
+	const loaderRef = useRef(useLoaderStore.getState());
+
+	useEffect(() => {
+		const unsubscribeLoading = useLoaderStore.subscribe((state) => {
+			loaderRef.current = state;
+			setBackdropOpen(state.open);
+		});
+
+		return () => {
+			unsubscribeLoading();
+		};
+	}, []);
+
 	return (
 		<>
 			<AppContainer />

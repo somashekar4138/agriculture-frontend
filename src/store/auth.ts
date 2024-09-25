@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import { mountStoreDevtool } from "simple-zustand-devtools";
 import { environment } from "@enviroment";
-import { LoaderService } from "@shared/services/LoaderService";
 
 export interface UserInterface {
 	id: string;
@@ -17,10 +16,9 @@ interface AuthStore {
 	setUser: (user: UserInterface | null) => void;
 	setToken: (token: string) => void;
 	logout: () => void;
-	validateToken: () => Promise<UserInterface | null>;
 }
 
-export const useAuthStore = create<AuthStore>((set, getStore) => ({
+export const useAuthStore = create<AuthStore>((set) => ({
 	isLoggedIn: false,
 	user: null,
 	setLoggedIn: (isLoggedIn) => set({ isLoggedIn }),
@@ -35,27 +33,6 @@ export const useAuthStore = create<AuthStore>((set, getStore) => ({
 	},
 	setToken: (token) => {
 		localStorage.setItem("authToken", token);
-		getStore().validateToken();
-	},
-	validateToken: async () => {
-		const authToken = localStorage.getItem("authToken");
-		if (authToken) {
-			try {
-				LoaderService.instance.showLoader();
-
-				// const user = "user";
-				// set({ isLoggedIn: true, user: user });
-				return null;
-			} catch (error) {
-				console.error("[AuthStore] validateToken error", error);
-				getStore().logout();
-				return null;
-			} finally {
-				LoaderService.instance.hideLoader();
-			}
-		}
-		getStore().logout();
-		return null;
 	},
 }));
 

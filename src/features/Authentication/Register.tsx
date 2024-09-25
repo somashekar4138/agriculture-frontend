@@ -6,8 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { PhoneInputFormField } from "@shared/components/FormFields/PhoneInputFormField";
 import { Constants } from "@shared/constants";
 import { isValidPhoneNumber } from "react-phone-number-input";
-import { RegisterUserDto } from "@api/services/models";
-import { useAppControllerRegisterUser } from "@api/services/default";
+import { useAppControllerRegisterUser } from "@api/services/auth";
 
 const Register = () => {
 	const navigation = useNavigate();

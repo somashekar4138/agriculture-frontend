@@ -6,4 +6,15 @@
  * OpenAPI spec version: 1.0
  */
 
+export * from "./blackSoilDto";
+export * from "./createBlackSoilDto";
+export * from "./createRedSoilDto";
+export * from "./redSoilDto";
 export * from "./registerUserDto";
+export * from "./soilControllerCreateBlackSoil200";
+export * from "./soilControllerCreateBlackSoil200AllOf";
+export * from "./soilControllerCreateRedSoil200";
+export * from "./soilControllerCreateRedSoil200AllOf";
+export * from "./soilControllerGetBlackSoilParams";
+export * from "./soilControllerGetRedSoilParams";
+export * from "./successResponseDto";
