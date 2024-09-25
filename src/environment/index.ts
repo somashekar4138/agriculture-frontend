@@ -2,7 +2,7 @@ const env = import.meta.env;
 
 export const environment = {
 	production: env.PROD || false,
-	baseUrl: "http://localhost:8000",
+	baseUrl: "https://agriculture-79ee3ab333e2.herokuapp.com/",
 	isTrueProd: env.VITE_APP_ENVIRONMENT === "production",
 };
 import { initializeApp } from "firebase/app";
