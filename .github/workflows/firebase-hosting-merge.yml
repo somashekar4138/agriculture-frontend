@@ -23,9 +23,9 @@ jobs:
           cache: "yarn"
       - name: Install dependencies
         run: yarn --prefer-offline
-      # - name: Create env file
-      #   run: |
-      #     echo "${{ secrets.DEV_ENV }}" > .env
+      - name: Create env file
+        run: |
+          echo "${{ secrets.DEV_ENV }}" > .env
       - name: Build app
         run: yarn build
       - name: Create .firebaserc file
