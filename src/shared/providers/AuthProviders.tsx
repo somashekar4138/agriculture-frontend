@@ -168,6 +168,7 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
 	}, []);
 
 	const signOut = useCallback(async (id?: string) => {
+		console.log(id);
 		try {
 			await logout();
 			await auth.signOut();

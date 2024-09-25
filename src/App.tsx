@@ -6,7 +6,6 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { useAuthStore } from "@store/auth";
 import Loader from "@shared/components/Loader";
 import ConfirmDialog from "@shared/components/ConfirmDialog";
-import { useEffectOnce } from "@shared/hooks/useEffectOnce";
 import Navbar from "@layout/navbar/Home/Navbar";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
